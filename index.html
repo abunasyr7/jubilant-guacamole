@@ -22,7 +22,20 @@
       </ol>
     </div>
   </main>
-  <div id="popup-container"></div>
+  <div class="popup-overlay">
+    <div class="popup">
+      <button class="popup-close">&times;</button>
+      <div class="popup-content">
+        <h2>To register, enter the mail to which our news is sent and set your password</h2>
+        <form>
+          <input type="email" placeholder="Email" required />
+          <input type="password" placeholder="Password" required />
+          <button type="submit" class="btn-submit">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
 
   <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
