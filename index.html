@@ -27,9 +27,17 @@
       <button class="popup-close">&times;</button>
       <div class="popup-content">
         <h2>To register, enter the mail to which our news is sent and set your password</h2>
-        <form>
-          <input type="email" placeholder="Email" required />
-          <input type="password" placeholder="Password" required />
+        <form id="register-form">
+          <div class="input-wrapper">
+            <input type="text" placeholder="Example@email.com" id="email" required />
+            <img src="/src/assets/error-icon.png" class="error-icon" alt="error" />
+            <p class="error-message">Please enter a valid e-mail</p>
+          </div>
+          <div class="input-wrapper">
+            <input type="password" placeholder="Password" id="password" required />
+            <img src="/src/assets/error-icon.png" class="error-icon" alt="error" />
+            <p class="error-message">The password is at least 8 characters long</p>
+          </div>
           <button type="submit" class="btn-submit">Submit</button>
         </form>
       </div>
