@@ -1,4 +1,5 @@
 import { AuthAPI } from "./api.ts";
+import { validateEmail } from "../helpers/validation.ts";
 
 export function setupEmailAndPasswordValidation() {
   const form = document.getElementById(
@@ -36,7 +37,6 @@ export function setupEmailAndPasswordValidation() {
       emailWrapper.classList.remove("invalid");
     }
 
-    // Проверка пароля ≥ 8 символов
     if (passwordInput.value.length < 8) {
       passwordWrapper.classList.add("invalid");
       valid = false;
@@ -91,9 +91,4 @@ export function setupEmailAndPasswordValidation() {
   passwordInput.addEventListener("input", () =>
     passwordWrapper.classList.remove("invalid"),
   );
-
-  function validateEmail(email: string) {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
-  }
 }
