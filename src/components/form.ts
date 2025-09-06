@@ -3,6 +3,11 @@ export function setupEmailAndPasswordValidation() {
     "register-form",
   ) as HTMLFormElement | null;
   if (!form) return;
+  const successPopup = document.getElementById(
+    "success-popup",
+  ) as HTMLElement | null;
+  const popupOverlay = document.querySelector(".popup-overlay") as HTMLElement;
+  const closeBtn = document.querySelector(".popup-close");
 
   const emailInput = document.getElementById(
     "email",
@@ -37,8 +42,17 @@ export function setupEmailAndPasswordValidation() {
     }
 
     if (valid) {
-      console.log("Форма валидна!");
-      form.submit(); // или твоя логика
+      if (successPopup) {
+        successPopup.classList.add("active");
+
+        closeBtn?.addEventListener("click", () => {
+          popupOverlay.classList.remove("active");
+          successPopup.classList.remove("active");
+        });
+        popupOverlay.addEventListener("click", () => {
+          successPopup.classList.remove("active");
+        });
+      }
     }
   });
 
