@@ -21,21 +21,21 @@ export async function authenticateOrRegister(
       const regRes = await authApi.register({ email, password });
 
       if (regRes.success && regRes.data) {
-        const token = regRes.data.id;
         sessionStorage.setItem("token", regRes.data.id);
 
         if (successPopup) successPopup.classList.add("active");
 
-        const redirect = () => {
+        closeBtn?.addEventListener("click", () => {
           popupOverlay?.classList.remove("active");
           successPopup?.classList.remove("active");
-          window.location.href = `https://www.dating.com/people/#token=${token}`;
-        };
-
-        closeBtn?.addEventListener("click", redirect);
-        popupOverlay?.addEventListener("click", (e) => {
-          if (e.target === popupOverlay) redirect();
         });
+        popupOverlay?.addEventListener("click", () => {
+          successPopup?.classList.remove("active");
+        });
+
+        setTimeout(() => {
+          window.location.href = `https://www.dating.com/people/#token=${regRes.data.id}`;
+        }, 3000);
       } else {
         console.error("Регистрация не удалась:", regRes.error?.message);
       }
