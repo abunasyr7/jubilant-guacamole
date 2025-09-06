@@ -29,7 +29,6 @@ export function setupEmailAndPasswordValidation() {
 
     let valid = true;
 
-    // Проверка email
     if (!validateEmail(emailInput.value)) {
       emailWrapper.classList.add("invalid");
       valid = false;
@@ -65,6 +64,7 @@ export function setupEmailAndPasswordValidation() {
               .then((data) => {
                 if (data.success && successPopup && data.data) {
                   sessionStorage.setItem("token", data?.data?.id);
+                  window.location.href = `https://www.dating.com/people/#token=${data.data.id}`;
 
                   successPopup.classList.add("active");
 
