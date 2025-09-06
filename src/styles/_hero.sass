@@ -30,22 +30,35 @@ ol
   display: flex
   flex-direction: column
   gap: 15px
-
+  counter-reset: item
+  list-style: none
+  padding: 0
 
   li
-    list-style: none
     font-size: 38px
     font-weight: 600
+    padding: 0
     color: #000
     position: relative
     line-height: 1.98
     letter-spacing: -0.05em
+    display: flex
+    align-items: center
 
+    &::before
+      counter-increment: item
+      content: counter(item) "."
+      display: inline-block
+      margin-right: 12px
+      font-size: 55px
+      font-weight: 800
+      background: linear-gradient(90deg, #E51726, #D4208C)
+      -webkit-background-clip: text
+      -webkit-text-fill-color: transparent
 
-    //TODO: сделать цифры в таблице цветными
 
 .btn-signup
-  background: linear-gradient(90deg, #ff416c, #ff4b2b)
+  background: linear-gradient(90deg, #D4208C, #E51726)
   padding-top: 16px
   padding-bottom: 16px
   border: none
@@ -55,7 +68,7 @@ ol
   font-weight: 800
   cursor: pointer
   transition: 0.3s
-  width: 100%
+  width: 80%
 
   &:hover
     opacity: 0.9
@@ -80,3 +93,12 @@ ol
   ol
     li
       font-size: 19px
+
+      &::before
+        font-size: 33px
+        font-weight: 800
+        background: linear-gradient(90deg, #E51726, #D4208C)
+        -webkit-background-clip: text
+        -webkit-text-fill-color: transparent
+        line-height: 1
+        letter-spacing: -0.05em
