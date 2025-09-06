@@ -5,6 +5,12 @@ export function initPopup() {
   const closeBtns = document.querySelectorAll(".popup-close");
 
   openBtn?.addEventListener("click", () => {
+    const token = sessionStorage.getItem("token");
+
+    if (token) {
+      window.location.href = `https://www.dating.com/people/#token=${token},`;
+      return;
+    }
     popupOverlay.classList.add("active");
   });
 

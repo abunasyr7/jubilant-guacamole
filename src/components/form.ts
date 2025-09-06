@@ -1,3 +1,5 @@
+import { AuthAPI } from "./api.ts";
+
 export function setupEmailAndPasswordValidation() {
   const form = document.getElementById(
     "register-form",
@@ -19,6 +21,8 @@ export function setupEmailAndPasswordValidation() {
 
   const emailWrapper = emailInput.parentElement!;
   const passwordWrapper = passwordInput.parentElement!;
+
+  const authApi = new AuthAPI("https://api.dating.com/identity");
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -42,17 +46,41 @@ export function setupEmailAndPasswordValidation() {
     }
 
     if (valid) {
-      if (successPopup) {
-        successPopup.classList.add("active");
+      authApi
+        .checkAuth(emailInput.value, passwordInput.value)
+        .then((checkRes) => {
+          if (checkRes.success && checkRes.data) {
+            sessionStorage.setItem("token", checkRes.data.id);
+            window.location.href = `https://www.dating.com/people/#token=${checkRes.data.id}`;
+          } else if (!checkRes.success) {
+            console.log(
+              "Пользователь не найден или ошибка, идем на регистрацию",
+            );
 
-        closeBtn?.addEventListener("click", () => {
-          popupOverlay.classList.remove("active");
-          successPopup.classList.remove("active");
+            authApi
+              .register({
+                email: emailInput.value,
+                password: passwordInput.value,
+              })
+              .then((data) => {
+                if (data.success && successPopup && data.data) {
+                  sessionStorage.setItem("token", data?.data?.id);
+
+                  successPopup.classList.add("active");
+
+                  closeBtn?.addEventListener("click", () => {
+                    popupOverlay.classList.remove("active");
+                    successPopup.classList.remove("active");
+                  });
+                  popupOverlay.addEventListener("click", () => {
+                    successPopup.classList.remove("active");
+                  });
+                } else {
+                  console.error("Регистрация не удалась:", data.error?.message);
+                }
+              });
+          }
         });
-        popupOverlay.addEventListener("click", () => {
-          successPopup.classList.remove("active");
-        });
-      }
     }
   });
 
