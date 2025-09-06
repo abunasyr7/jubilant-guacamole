@@ -1,5 +1,5 @@
-import { AuthAPI } from "./api.ts";
 import { validateEmail } from "../helpers/validation.ts";
+import { authenticateOrRegister } from "./authService.ts";
 
 export function setupEmailAndPasswordValidation() {
   const form = document.getElementById(
@@ -10,7 +10,7 @@ export function setupEmailAndPasswordValidation() {
     "success-popup",
   ) as HTMLElement | null;
   const popupOverlay = document.querySelector(".popup-overlay") as HTMLElement;
-  const closeBtn = document.querySelector(".popup-close");
+  const closeBtn = document.querySelector(".popup-close") as HTMLElement;
 
   const emailInput = document.getElementById(
     "email",
@@ -23,9 +23,7 @@ export function setupEmailAndPasswordValidation() {
   const emailWrapper = emailInput.parentElement!;
   const passwordWrapper = passwordInput.parentElement!;
 
-  const authApi = new AuthAPI("https://api.dating.com/identity");
-
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     let valid = true;
@@ -44,43 +42,14 @@ export function setupEmailAndPasswordValidation() {
       passwordWrapper.classList.remove("invalid");
     }
 
-    if (valid) {
-      authApi
-        .checkAuth(emailInput.value, passwordInput.value)
-        .then((checkRes) => {
-          if (checkRes.success && checkRes.data) {
-            sessionStorage.setItem("token", checkRes.data.id);
-            window.location.href = `https://www.dating.com/people/#token=${checkRes.data.id}`;
-          } else if (!checkRes.success) {
-            console.log(
-              "Пользователь не найден или ошибка, идем на регистрацию",
-            );
-
-            authApi
-              .register({
-                email: emailInput.value,
-                password: passwordInput.value,
-              })
-              .then((data) => {
-                if (data.success && successPopup && data.data) {
-                  sessionStorage.setItem("token", data?.data?.id);
-                  window.location.href = `https://www.dating.com/people/#token=${data.data.id}`;
-
-                  successPopup.classList.add("active");
-
-                  closeBtn?.addEventListener("click", () => {
-                    popupOverlay.classList.remove("active");
-                    successPopup.classList.remove("active");
-                  });
-                  popupOverlay.addEventListener("click", () => {
-                    successPopup.classList.remove("active");
-                  });
-                } else {
-                  console.error("Регистрация не удалась:", data.error?.message);
-                }
-              });
-          }
-        });
+    if (valid && successPopup) {
+      await authenticateOrRegister(
+        emailInput.value,
+        passwordInput.value,
+        successPopup,
+        popupOverlay,
+        closeBtn,
+      );
     }
   });
 
