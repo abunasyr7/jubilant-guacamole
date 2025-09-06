@@ -1,21 +1,32 @@
 export function initPopup() {
+  const popupOverlays = document.querySelectorAll(".popup-overlay");
   const popupOverlay = document.querySelector(".popup-overlay") as HTMLElement;
   const openBtn = document.querySelector(".btn-signup");
-  const closeBtn = document.querySelector(".popup-close");
+  const closeBtns = document.querySelectorAll(".popup-close");
 
   openBtn?.addEventListener("click", () => {
     popupOverlay.classList.add("active");
   });
 
-  closeBtn?.addEventListener("click", () => {
-    popupOverlay.classList.remove("active");
+  closeBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".popup-overlay").forEach((popup) => {
+        popup.classList.remove("active");
+      });
+    });
   });
 
-  popupOverlay.addEventListener("click", (e) => {
-    if (e.target === popupOverlay) popupOverlay.classList.remove("active");
+  popupOverlays.forEach((popup) => {
+    popup.addEventListener("click", (e) => {
+      if (e.target === popup) {
+        popupOverlays.forEach((p) => p.classList.remove("active"));
+      }
+    });
   });
 
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") popupOverlay.classList.remove("active");
+    if (e.key === "Escape") {
+      popupOverlays.forEach((popup) => popup.classList.remove("active"));
+    }
   });
 }
